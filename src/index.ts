@@ -76,20 +76,72 @@ function editSuccessMethodNode(node: ts.MethodSignature) {
   return node
 }
 
+
 const transpileVoidToPromise: ts.TransformerFactory<ts.SourceFile> = function(
   context
 ) {
   const visit: ts.Visitor = function(node) {
     node = ts.visitEachChild(node, visit, context)
 
-    const isWXInterface = node =>
-      node && ts.isInterfaceDeclaration(node) && node.name.getText() === "WX"
+    const isWXInterface = node => node && ts.isInterfaceDeclaration(node) && node.name.getText() === "WX"
+
+    // 修改为promise返回
     if (isWXInterface(node.parent)) {
       if (ts.isMethodSignature(node)) {
         node = editSuccessMethodNode(node)
       }
     }
+    
+    // 修改Interface WX 为 WXP
+    if (isWXInterface(node)) {
+      const origin = node as ts.InterfaceDeclaration
+      node = ts.updateInterfaceDeclaration(
+        origin,
+        origin.decorators,
+        origin.modifiers,
+        ts.createIdentifier('WXP'),
+        undefined,
+        undefined,
+        origin.members
+      )
+    }
 
+    // 修改namespace wx为 wxp
+    if (ts.isModuleDeclaration(node) && (node.name.getText() === 'wx')) {
+      node = ts.updateModuleDeclaration(
+        node,
+        node.decorators,
+        [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
+        ts.createIdentifier('wxp'),
+        node.body
+      )
+    }
+
+    // 修改wx声明
+    if (ts.isVariableStatement(node)) {
+      const declareNode = node.declarationList.declarations[0]
+      if (declareNode && declareNode.name.getText() === 'wx') {
+        node = ts.createVariableStatement(
+          [ts.createModifier(ts.SyntaxKind.DeclareKeyword)],
+          ts.createVariableDeclarationList(
+            [
+              ts.createVariableDeclaration(
+                ts.createIdentifier('wxp'),
+                ts.createTypeReferenceNode(
+                  ts.createQualifiedName(
+                    ts.createIdentifier('wxp'),
+                    ts.createIdentifier('WXP')
+                  ),
+                  undefined
+                ),
+                undefined
+              )
+            ],
+            ts.NodeFlags.Const
+          )
+        )
+      }
+    }
     return node
   }
   return node => ts.visitNode(node, visit)
@@ -98,7 +150,7 @@ const transpileVoidToPromise: ts.TransformerFactory<ts.SourceFile> = function(
 function generateDeclareFile() {
   const file = ts.transform(sourceFile, [transpileVoidToPromise])
   const content = printer.printFile(file.transformed[0])
-  genOutputFile('wxp.api.d.ts', content)
+  genOutputFile('wxp.d.ts', content)
 }
 
 function generateMethodListFile() {
