@@ -45,8 +45,9 @@ function editSuccessMethodNode(node: ts.MethodSignature) {
     }
   }
   const methodNode = node as ts.MethodSignature
-  // 查找参数数量为一
-  if (methodNode.parameters.length === 1) {
+  const returnType = methodNode.type.getText()
+  // 查找参数数量为一而且原返回为空
+  if (methodNode.parameters.length === 1 && returnType === 'void') {
     const firstParam = methodNode.parameters[0]
     // const symbol = checker.getSymbolAtLocation()
     const firstParamType = checker.getTypeAtLocation(firstParam.name)
