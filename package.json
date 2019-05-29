@@ -1,6 +1,6 @@
 {
   "name": "@strange-fish/wxp",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "wx api promisify",
   "publishConfig": {
     "access": "public"
