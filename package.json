@@ -41,6 +41,7 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.0.0",
-    "ts-node": "^8.1.0"
+    "ts-node": "^8.1.0",
+    "miniprogram-api-typings": "^2.6.5-2"
   }
 }

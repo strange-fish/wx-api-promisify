@@ -2,9 +2,9 @@ import * as ts from "typescript"
 import { resolve } from "path"
 import { promises as fs } from "fs"
 
-const rootFile = resolve(__dirname, "../wx/index.d.ts")
+const rootFile = resolve(__dirname, "../node_modules/miniprogram-api-typings/index.d.ts")
 
-const targetFile = resolve(__dirname, "../wx/lib.wx.api.d.ts")
+const targetFile = resolve(__dirname, "../node_modules/miniprogram-api-typings/types/wx/lib.wx.api.d.ts")
 
 function genOutputFile(fileName: string, content: string) {
   fs.writeFile(resolve(__dirname, `../dist/${fileName}`), content).then(res => {
@@ -83,7 +83,7 @@ const transpileVoidToPromise: ts.TransformerFactory<ts.SourceFile> = function(
   const visit: ts.Visitor = function(node) {
     node = ts.visitEachChild(node, visit, context)
 
-    const isWXInterface = node => node && ts.isInterfaceDeclaration(node) && node.name.getText() === "WX"
+    const isWXInterface = node => node && ts.isInterfaceDeclaration(node) && node.name.getText() === "Wx"
 
     // 修改为promise返回
     if (isWXInterface(node.parent)) {
