@@ -77,6 +77,10 @@ function editSuccessMethodNode(node: ts.MethodSignature) {
   return node
 }
 
+const WX_NAMESPACE = 'WechatMiniprogram'
+const ORIGIN_WX_INTERFACE = 'Wx'
+const WXP_INTERFACE = 'Wxp'
+
 
 const transpileVoidToPromise: ts.TransformerFactory<ts.SourceFile> = function(
   context
@@ -84,54 +88,54 @@ const transpileVoidToPromise: ts.TransformerFactory<ts.SourceFile> = function(
   const visit: ts.Visitor = function(node) {
     node = ts.visitEachChild(node, visit, context)
 
-    const isWXInterface = node => node && ts.isInterfaceDeclaration(node) && node.name.getText() === "Wx"
+    const isWXInterface = node => node && ts.isInterfaceDeclaration(node) && node.name.getText() === ORIGIN_WX_INTERFACE
 
-    // 修改为promise返回
+    //! 修改为promise返回
     if (isWXInterface(node.parent)) {
       if (ts.isMethodSignature(node)) {
         node = editSuccessMethodNode(node)
       }
     }
     
-    // 修改Interface WX 为 WXP
+    //! 修改Interface Wx 为 Wxp
     if (isWXInterface(node)) {
       const origin = node as ts.InterfaceDeclaration
       node = ts.updateInterfaceDeclaration(
         origin,
         origin.decorators,
         origin.modifiers,
-        ts.createIdentifier('WXP'),
+        ts.createIdentifier(WXP_INTERFACE),
         undefined,
         undefined,
         origin.members
       )
     }
 
-    // 修改namespace wx为 wxp
-    if (ts.isModuleDeclaration(node) && (node.name.getText() === 'wx')) {
-      node = ts.updateModuleDeclaration(
-        node,
-        node.decorators,
-        [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
-        ts.createIdentifier('wxp'),
-        node.body
-      )
-    }
+    // //! 修改namespace WechatMiniprogram 为 wxp
+    // if (ts.isModuleDeclaration(node) && (node.name.getText() === WX_NAMESPACE)) {
+    //   node = ts.updateModuleDeclaration(
+    //     node,
+    //     node.decorators,
+    //     [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
+    //     ts.createIdentifier('wxp'),
+    //     node.body
+    //   )
+    // }
 
-    // 修改wx声明
+    //! 修改 declare wx声明
     if (ts.isVariableStatement(node)) {
       const declareNode = node.declarationList.declarations[0]
       if (declareNode && declareNode.name.getText() === 'wx') {
         node = ts.createVariableStatement(
-          [ts.createModifier(ts.SyntaxKind.DeclareKeyword)],
+          [ts.createModifier(ts.SyntaxKind.ExportKeyword)],
           ts.createVariableDeclarationList(
             [
               ts.createVariableDeclaration(
                 ts.createIdentifier('wxp'),
                 ts.createTypeReferenceNode(
                   ts.createQualifiedName(
-                    ts.createIdentifier('wxp'),
-                    ts.createIdentifier('WXP')
+                    ts.createIdentifier(WX_NAMESPACE),
+                    ts.createIdentifier(WXP_INTERFACE)
                   ),
                   undefined
                 ),
