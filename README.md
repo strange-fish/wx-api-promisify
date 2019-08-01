@@ -1,7 +1,9 @@
 # wx-api-promisify
-use ast to parse wx.api.d.ts and generate promisfy d.ts
+use ast to parse wx.api.d.ts and generate promisify d.ts
 
 使用ast重写官方的wx.api.d.ts声明文件生成promise化的声明文件
+
+从2.7.7 开始跟随 miniprogram-api-typings 的版本代号
 
 ## 使用方法:
 
