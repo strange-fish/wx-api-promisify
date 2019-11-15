@@ -155,7 +155,10 @@ const transpileVoidToPromise: ts.TransformerFactory<ts.SourceFile> = function(
 function generateDeclareFile() {
   const file = ts.transform(sourceFile, [transpileVoidToPromise])
   const content = printer.printFile(file.transformed[0])
-  genOutputFile('wxp.d.ts', content)
+  const uselessDeclareStartStr = 'declare function require(module: string)'
+  const contentIndex = content.lastIndexOf(uselessDeclareStartStr)
+  
+  genOutputFile('wxp.d.ts', content.substring(0, contentIndex))
 }
 
 function generateMethodListFile() {
