@@ -21,3 +21,21 @@ async function demo () {
   console.log(userInfo)
 }
 ```
+
+#### 全局声明
+全局声明后可直接使用 wxp
+
+typings/wxp.d.ts
+```ts
+import { wxp as wxPromise } from '@strange-fish/wxp'
+
+export as namespace wxp
+export = wxPromise
+```
+
+global.js
+```js
+import { wxp } from '@strange-fish/wxp'
+
+global.wxp = wxp
+```
