@@ -1,6 +1,6 @@
 {
   "name": "@strange-fish/wxp",
-  "version": "2.9.3",
+  "version": "2.9.4",
   "description": "wx api promisify",
   "publishConfig": {
     "access": "public"
@@ -24,24 +24,24 @@
     "url": "https://github.com/strange-fish/wx-api-promisify"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.5",
-    "@babel/core": "^7.7.5",
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
     "@babel/plugin-external-helpers": "^7.7.4",
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@babel/plugin-proposal-export-namespace-from": "^7.7.4",
     "@babel/plugin-proposal-function-sent": "^7.7.4",
     "@babel/plugin-proposal-numeric-separator": "^7.7.4",
     "@babel/plugin-proposal-throw-expressions": "^7.7.4",
-    "@babel/preset-env": "^7.7.6",
-    "@types/node": "^12.12.14",
-    "miniprogram-api-typings": "^2.9.3",
-    "rollup": "^1.27.9",
+    "@babel/preset-env": "^7.7.7",
+    "@types/node": "^12.12.22",
+    "miniprogram-api-typings": "^2.9.4",
+    "rollup": "^1.27.14",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.2.0",
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.4"
   }
 }
