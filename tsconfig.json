@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*"],
+  "include": ["src/index.ts"],
   "compilerOptions": {
     "target": "es2018",
     "module": "commonjs",
