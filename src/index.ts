@@ -7,7 +7,7 @@ const rootFile = resolve(__dirname, "../node_modules/miniprogram-api-typings/ind
 const targetFile = resolve(__dirname, "../node_modules/miniprogram-api-typings/types/wx/lib.wx.api.d.ts")
 
 function genOutputFile(fileName: string, content: string) {
-  fs.writeFile(resolve(__dirname, `../dist/${fileName}`), content).then(res => {
+  fs.appendFile(resolve(__dirname, `../dist/${fileName}`), content).then(res => {
     console.log(`成功生成文件 ${fileName}`)
   })
 }
@@ -166,5 +166,10 @@ function generateMethodListFile() {
   genOutputFile('methodList.json', content)
 }
 
-generateDeclareFile()
-generateMethodListFile()
+try {
+  generateDeclareFile()
+  generateMethodListFile()
+} catch (err) {
+  console.error(err)
+  process.exit(1)
+}
