@@ -1,5 +1,5 @@
 import * as ts from "typescript"
-import { resolve } from "path"
+import { resolve, join } from "path"
 import { promises as fs } from "fs"
 
 const rootFile = resolve(__dirname, "../node_modules/miniprogram-api-typings/index.d.ts")
@@ -7,7 +7,7 @@ const rootFile = resolve(__dirname, "../node_modules/miniprogram-api-typings/ind
 const targetFile = resolve(__dirname, "../node_modules/miniprogram-api-typings/types/wx/lib.wx.api.d.ts")
 
 function genOutputFile(fileName: string, content: string) {
-  fs.appendFile(resolve(__dirname, `../dist/${fileName}`), content).then(res => {
+  fs.writeFile(join(__dirname, `../dist/${fileName}`), content).then(res => {
     console.log(`成功生成文件 ${fileName}`)
   })
 }
@@ -157,7 +157,6 @@ function generateDeclareFile() {
   const content = printer.printFile(file.transformed[0])
   const uselessDeclareStartStr = 'declare function require(module: string)'
   const contentIndex = content.lastIndexOf(uselessDeclareStartStr)
-  
   genOutputFile('wxp.d.ts', content.substring(0, contentIndex))
 }
 
