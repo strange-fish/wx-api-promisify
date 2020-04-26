@@ -1,4 +1,6 @@
-# wx-api-promisify
+# wx-api-promisify (废弃)
+最新版的miniprogram-api-typings(2.10.4) 已经支持promise返回。
+
 use ast to parse wx.api.d.ts and generate promisify d.ts
 
 使用ast重写官方的wx.api.d.ts声明文件生成promise化的声明文件
